@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title>installing service worker</title>
+  <script type="text/javascript">
+    const swsource = 'https://media-streaming.surge.sh/sw.js';
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register(swsource).then(function(reg) {
+        console.log('ServiceWorker scope: ', reg.scope);
+      }).catch(function(err) {
+        console.log('ServiceWorker registration failed: ', err);
+      });
+    }
+  </script>
+</head>
+<body>
+</body>
+</html>

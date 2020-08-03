@@ -1,0 +1,27 @@
+{
+  "parser": "babel-eslint",
+  "extends": [
+    "airbnb",
+    "plugin:prettier/recommended",
+    "prettier"
+  ],
+  "plugins": [
+    "prettier"
+  ],
+  "rules": {
+    "jsx-a11y/click-events-have-key-events": 1, // TODO: enable
+    "no-restricted-imports": 0, // TODO: enable with full RTL support
+    "react/jsx-props-no-spreading": 0, // TODO: re-evaluate
+    "react/prop-types": 0,
+    "react/no-deprecated": 1, // TODO: update to UNSAFE_componentWillReceiveProps
+    "prettier/prettier": ["error"],
+    "react/forbid-foreign-prop-types": 2, // For babel-plugin-transform-react-remove-prop-types
+    "react/react-in-jsx-scope": "off",
+    "react/jsx-filename-extension": "off",
+    "no-param-reassign": [2, { "props": false }],
+    "no-unused-vars": 0
+  },
+  "globals": {
+    "graphql": true
+  }
+}
