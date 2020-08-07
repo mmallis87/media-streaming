@@ -1,4 +1,5 @@
 import React from 'react';
+import { Result, Button } from 'antd';
 
 import Layout from '../components/layout/layout';
 import SEO from '../components/seo/seo';
@@ -6,8 +7,16 @@ import SEO from '../components/seo/seo';
 const NotFoundPage = () => (
   <Layout>
     <SEO title="404: Not found" />
-    <h1>NOT FOUND</h1>
-    <p>You just hit a route that doesn&#39;t exist... the sadness.</p>
+    <Result
+      status="404"
+      title="Not found"
+      subTitle="Sorry, the page you visited does not exist."
+      extra={
+        <Button type="primary" href="/">
+          Back Home
+        </Button>
+      }
+    />
   </Layout>
 );
 

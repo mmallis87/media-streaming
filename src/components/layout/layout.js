@@ -4,7 +4,6 @@ import { graphql, useStaticQuery } from 'gatsby';
 import { connect } from 'react-redux';
 import { ThemeProvider } from 'emotion-theming';
 
-import Container from './container';
 import Content from './content';
 import Overlay from './overlay';
 import Header from '../header/header';
@@ -27,16 +26,10 @@ const Layout = ({ children, isDrawerOpen, toggleDrawer }) => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Container>
-        <Content isDrawerOpen={isDrawerOpen}>
-          {children}
-          <footer>
-            {`Copyright © ${new Date().getFullYear()} ${
-              data.site.siteMetadata.author
-            }`}
-          </footer>
-        </Content>
-      </Container>
+      <Content isDrawerOpen={isDrawerOpen}>
+        {children}
+        <footer />
+      </Content>
       <Overlay
         isDrawerOpen={isDrawerOpen}
         onClick={() => toggleDrawer(false)}

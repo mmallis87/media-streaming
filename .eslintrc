@@ -9,15 +9,17 @@
     "prettier"
   ],
   "rules": {
-    "jsx-a11y/click-events-have-key-events": 1, // TODO: enable
-    "no-restricted-imports": 0, // TODO: enable with full RTL support
-    "react/jsx-props-no-spreading": 0, // TODO: re-evaluate
-    "react/prop-types": 0,
-    "react/no-deprecated": 1, // TODO: update to UNSAFE_componentWillReceiveProps
+    "jsx-a11y/click-events-have-key-events": 0,
+    "jsx-a11y/no-static-element-interactions": 0,
+    "no-restricted-imports": 0,
+    "react/jsx-props-no-spreading": 0,
+    "react/prop-types": 0, // TODO: update to UNSAFE_componentWillReceiveProps
     "prettier/prettier": ["error"],
-    "react/forbid-foreign-prop-types": 2, // For babel-plugin-transform-react-remove-prop-types
-    "react/react-in-jsx-scope": "off",
-    "react/jsx-filename-extension": "off",
+    "react/forbid-foreign-prop-types": 2,
+    "react/react-in-jsx-scope": 0,
+    "react/jsx-wrap-multilines": 0,
+    "react/jsx-filename-extension": 0,
+    "react/jsx-curly-newline": 0,
     "no-param-reassign": [2, { "props": false }],
     "no-unused-vars": 0
   },

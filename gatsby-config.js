@@ -1,12 +1,29 @@
+const lessToJson = require('less-to-json');
+
 module.exports = {
   siteMetadata: {
-    title: 'Media Streaming Browser',
+    title: 'Channel Browser',
     description:
       'A serverless AMP-to-PWA media streaming browser single-page application.',
     author: 'Majid Mallis',
     siteUrl: 'https://media-streaming.surge.sh/',
   },
   plugins: [
+    {
+      resolve: 'gatsby-plugin-antd',
+      options: {
+        style: true,
+      },
+    },
+    {
+      resolve: 'gatsby-plugin-less',
+      options: {
+        lessOptions: {
+          javascriptEnabled: true,
+          modifyVars: lessToJson('src/style/theme.less'),
+        },
+      },
+    },
     {
       resolve: 'gatsby-source-filesystem',
       options: {

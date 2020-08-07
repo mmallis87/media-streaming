@@ -67,5 +67,17 @@ A quick look at the top-level files and directories you'll see in this project.
 
 12. **`README.md`**: A text file containing useful reference information about your project.
 
+## Todo list
+- [ ] Overlay the play/pause icon on top each channel card
+- [ ] Cache data that doesn't change frequently change (such a `stations.json`)
+- [ ] Measure and increase test coverage (using `coveralls`)
+- [ ] Add unit tests for helper functions
+- [ ] Add mock tests external services
+- [ ] Add integration tests
+- [ ] Split `layout.css` into `<component>.css` per component
+- [ ] Use `styled-components` css-in-js framework even more
+- [ ] Add `index.js` to each subfolder of components to act as an interface between the components in the subfolder and the rest of the project. This make components more reusable
+- [ ] Perform an initial SEO pass
+
 ## Copyright
 Copyright © 2020 Majid Mallis
