@@ -1,15 +1,17 @@
 import React from 'react';
 import { Alert } from 'antd';
 
-const MessageCenter = ({ errorMessage }) =>
-  errorMessage && (
+const MessageCenter = ({ message, errorMessage }) =>
+  errorMessage ? (
     <Alert
-      message="Error"
+      message={message}
       description={errorMessage}
       type="error"
       showIcon
       closable
     />
+  ) : (
+    <></>
   );
 
 export default MessageCenter;

@@ -1,23 +1,30 @@
 import React, { useEffect, useState } from 'react';
-import { List, Input, BackTop, Affix, Card, Typography, message } from 'antd';
-import {
-  PauseCircleFilled,
-  PlayCircleFilled,
-  SearchOutlined,
-} from '@ant-design/icons';
+import { BackTop } from 'antd';
 import { pick } from 'lodash';
 
 import { getStreams } from '../services/tunein-json-api';
-import filterObjectByValue from '../util/helpers';
+import {
+  filterObjectByValue,
+  setPageTitle,
+  sortByProp1ThenProp2,
+} from '../util/helpers';
 import Layout from '../components/layout/layout';
 import SEO from '../components/seo/seo';
-import Channel from '../components/channel/channel';
+import Search from '../components/search/search';
 import MessageCenter from '../components/message-center/message-center';
-import Image from '../components/image/image';
-import theme from '../style/theme';
+import {
+  showLoadingToast,
+  showUnavailableErrorToast,
+} from '../components/message-center/toasts';
+import {
+  BUFFERING,
+  CANNOT_LOAD_STATIONS_LIST,
+  HOME_PAGE_TITLE,
+} from '../util/consts';
+import ChannelList from '../components/channel/channel-list';
+import MediaPlayer from '../components/media-player/media-player';
 
 const IndexPage = () => {
-  global.alert = () => {};
   const [errorMessage, setErrorMessage] = useState('');
   const [query, setQuery] = useState('');
   const [streams, setStreams] = useState({});
@@ -25,7 +32,8 @@ const IndexPage = () => {
   const [streamIdsByTag, setStreamIdsByTag] = useState({});
   const [selectedTag, setSelectedTag] = useState('');
   const [playingStream, setPlayingStream] = useState(null);
-  const [streamChecked, setStreamChecked] = useState({});
+
+  const HOME_PAGE_KEYWORDS = [`gatsby`, `application`, `react`];
 
   const handleQueryChange = (e) => {
     const newQuery = e.target.value;
@@ -56,68 +64,38 @@ const IndexPage = () => {
   };
 
   const stopPlayingStream = (id) => {
-    if (id === playingStream.id) {
+    if (playingStream && id === playingStream.id) {
       setPlayingStream(null);
     }
   };
 
-  const playPauseStream = async (stream) => {
-    let bufferingMessage;
-    const { audioElement, id, name } = stream;
-    const key = 'loading-audio';
+  const handleCardClick = async (stream) => {
+    let hideBufferingMessage;
+    const { audioElement, name } = stream;
     if (audioElement) {
       if (audioElement.paused) {
-        if (!streamChecked[id]) {
-          try {
-            bufferingMessage = message.loading(
-              { key, content: 'Buffering...' },
-              0,
-            );
-          } catch (error) {
-            message.error(
-              {
-                key,
-                content: `${error.message}. This channel appears to be unavailable at the moment.`,
-              },
-              3,
-            );
-            return;
-          }
+        hideBufferingMessage = showLoadingToast(BUFFERING);
+
+        audioElement.load();
+
+        const playPromise = audioElement.play();
+        if (playPromise) {
+          playPromise
+            .then((_) => {
+              if (playingStream && !playingStream.audioElement.paused) {
+                playingStream.audioElement.pause();
+              }
+              hideBufferingMessage();
+              setPlayingStream({ ...stream, isPlaying: true });
+              setPageTitle(name);
+            })
+            .catch((_) => {
+              showUnavailableErrorToast();
+            });
         }
-
-        global.document.title = `${name} Channel | ${
-          global.document.title.split(' | ')[1]
-        }`;
-
-        setStreamChecked((oldStreamChecked) => {
-          oldStreamChecked[id] = true;
-          return {
-            ...oldStreamChecked,
-          };
-        });
-
-        const i = setImmediate(() => {
-          clearImmediate(i);
-          if (bufferingMessage) {
-            bufferingMessage();
-          }
-        });
-
-        if (playingStream && !playingStream.audioElement.paused) {
-          playingStream.audioElement.pause();
-        }
-        audioElement.play();
-        setPlayingStream({ ...stream, isPlaying: true });
       }
     } else {
-      message.error(
-        {
-          key,
-          content:
-            'This channel appears to be unavailable at the moment. Please try again later.',
-        },
-        3,
-      );
+      showUnavailableErrorToast();
     }
   };
 
@@ -171,116 +149,64 @@ const IndexPage = () => {
 
   useEffect(() => {
     if (playingStream) {
-      // TODO figure out a better way to keep playing the strea without interruption when the stream card is briefly unmounted
-      setTimeout(() => {
+      // Wait for re-rendering filtered streams to be processed
+      const i = setImmediate(() => {
         if (playingStream.audioElement.paused) {
           playingStream.audioElement.play();
         }
-      }, 10);
+        clearImmediate(i);
+      });
     }
   }, [filteredStreams]);
+
+  const dataSource = sortByProp1ThenProp2(
+    filteredStreams,
+    'popularity',
+    'reliability',
+  );
 
   return (
     <div>
       <Layout>
-        <SEO title="Home" keywords={[`gatsby`, `application`, `react`]} />
+        <SEO title={HOME_PAGE_TITLE} keywords={HOME_PAGE_KEYWORDS} />
 
         <div className="container">
           {/* Sticky error messages center in the top of the page */}
           <div className={errorMessage ? 'box' : ''}>
-            <MessageCenter errorMessage={errorMessage} />
-          </div>
-
-          <div className="site-card-wrapper">
-            <Input
-              className="no-padding"
-              onChange={handleQueryChange}
-              bordered={false}
-              size="large"
-              placeholder="Search (news, music, sports, city, name... or anything. really!)"
-              value={query}
-              prefix={<SearchOutlined />}
+            <MessageCenter
+              message={CANNOT_LOAD_STATIONS_LIST}
+              errorMessage={errorMessage}
             />
           </div>
 
-          <div className="site-card-wrapper">
-            <List
-              rowKey={({ id }) => id}
-              grid={{
-                gutter: 32,
-                xs: 1,
-                sm: 2,
-                md: 3,
-                lg: 3,
-                xl: 4,
-                xxl: 4,
-              }}
-              dataSource={Object.values(filteredStreams).sort((s1, s2) =>
-                s2.popularity === s1.popularity
-                  ? s2.reliability - s1.reliability
-                  : s2.popularity - s1.popularity,
-              )}
-              renderItem={(stream) =>
-                stream.id in streams &&
-                stream.id in filteredStreams && (
-                  <List.Item span={16}>
-                    <Channel
-                      key={stream.id}
-                      {...stream}
-                      playPauseStream={playPauseStream}
-                      stopPlayingStream={stopPlayingStream}
-                      handleTagClick={handleTagClick}
-                      selectedTag={selectedTag}
-                    />
-                  </List.Item>
-                )
-              }
-            />
-          </div>
+          {/* Search box in the top of the page body */}
+          <Search query={query} onChange={handleQueryChange} />
+
+          {/* Streams cards list */}
+          <ChannelList
+            dataSource={dataSource}
+            items={streams}
+            filteredItems={filteredStreams}
+            handleCardClick={handleCardClick}
+            stopPlayingStream={stopPlayingStream}
+            handleTagClick={handleTagClick}
+            selectedTag={selectedTag}
+          />
         </div>
 
+        {/* Scroll to top button */}
         <BackTop />
       </Layout>
 
+      {/* Sticky media player */}
       {playingStream && (
-        <Affix offsetBottom={0} style={{ width: '100%' }}>
-          <Card className="padding-md margin-around-md">
-            <Typography.Paragraph>
-              <Image
-                width={96}
-                alt={playingStream.name}
-                src={playingStream.imgUrl}
-              />
-              <div className="parent play-icon">
-                <div className="child">
-                  <div
-                    className="clickable child"
-                    onClick={handlePlayPauseClick}
-                  >
-                    {playingStream.isPlaying ? (
-                      <PauseCircleFilled
-                        style={{
-                          fontSize: '64px',
-                          color: theme.palette.secondary.main,
-                        }}
-                      />
-                    ) : (
-                      <PlayCircleFilled
-                        style={{
-                          fontSize: '64px',
-                          color: theme.palette.secondary.main,
-                        }}
-                      />
-                    )}
-                  </div>
-                </div>
-              </div>
-            </Typography.Paragraph>
-            <Typography.Paragraph className="no-margin">
-              {playingStream.description}
-            </Typography.Paragraph>
-          </Card>
-        </Affix>
+        <MediaPlayer
+          isPlaying={playingStream.isPlaying}
+          description={playingStream.description}
+          handlePlayPauseClick={handlePlayPauseClick}
+          imgAlt={playingStream.name}
+          imgUrl={playingStream.imgUrl}
+        />
       )}
     </div>
   );

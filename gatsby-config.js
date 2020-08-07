@@ -2,11 +2,11 @@ const lessToJson = require('less-to-json');
 
 module.exports = {
   siteMetadata: {
-    title: 'Channel Browser',
+    title: 'Media Player',
     description:
       'A serverless AMP-to-PWA media streaming browser single-page application.',
     author: 'Majid Mallis',
-    siteUrl: 'https://media-streaming.surge.sh/',
+    siteUrl: 'https://radioplayer.surge.sh/',
   },
   plugins: [
     {
@@ -52,9 +52,9 @@ module.exports = {
         files: ['index.html'],
         dist: 'public/amp',
         serviceWorker: {
-          src: 'https://media-streaming.surge.sh/sw.js',
+          src: 'https://radioplayer.sh/sw.js',
           'data-iframe-src':
-            'https://media-streaming.surge.sh/amp-install-serviceworker.html',
+            'https://radioplayer/amp-install-serviceworker.html',
           layout: 'nodisplay',
         },
       },

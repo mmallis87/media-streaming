@@ -1,0 +1,10 @@
+node_modules/*
+
+# Ignore static files
+static/*
+
+# Ignore built files
+public/*
+
+# Ignore examples
+.cache/*

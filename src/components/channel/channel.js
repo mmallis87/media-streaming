@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import {
   Typography,
-  Card,
   Progress,
   Rate,
-  Tag,
   Tooltip,
   Row,
   Col,
+  Card,
   Space,
-  message,
 } from 'antd';
 
+import Pill from '../pill/pill';
+import Audio from '../audio/audio';
 import Image from '../image/image';
 import theme from '../../style/theme';
+import { showUnavailableErrorToast } from '../message-center/toasts';
 
 const Channel = (stream) => {
   const {
@@ -25,123 +26,88 @@ const Channel = (stream) => {
     tags,
     reliability,
     streamUrl,
-    playPauseStream,
+    handleCardClick,
     stopPlayingStream,
     handleTagClick,
     selectedTag,
   } = stream;
-  const [fetchingData, setFetchingData] = useState(true);
   const [streamAvailable, setStreamAvailable] = useState(false);
   const audioElementRef = React.createRef();
 
-  const handleCardClick = async () => {
+  const handleClick = () => {
     const audioElement = audioElementRef.current;
-    playPauseStream({ ...stream, audioElement });
+    handleCardClick({ ...stream, audioElement });
   };
 
   const handleAudioError = () => {
-    const key = 'loading-audio';
-    message.error(
-      {
-        key,
-        content:
-          'This channel appears to be unavailable at the moment. Please try again later.',
-      },
-      3,
-    );
+    showUnavailableErrorToast();
     setStreamAvailable(false);
     stopPlayingStream(id);
   };
 
-  const fetchdata = async () => {
-    setFetchingData(true);
-    try {
-      setStreamAvailable(true);
-    } catch (error) {
-      handleAudioError(error.message);
-    }
-
-    setFetchingData(false);
-  };
-
   useEffect(() => {
-    fetchdata().then();
+    setStreamAvailable(true);
   }, []);
 
   return (
-    !fetchingData && (
-      <div className="clickable" onClick={handleCardClick}>
-        <Card
-          bordered
-          style={{ width: '100%', height: 360, minWidth: 250, marginTop: 16 }}
-        >
-          <div className="space-align-container">
-            <span className="space-align-block">
-              <Space align="start">
-                <Image alt={name} src={imgUrl} />
-              </Space>
-            </span>
-          </div>
-          <Row>
-            <Col flex={1}>
-              <Tooltip
-                title={`${reliability}% reliable`}
-                color={theme.palette.primary.main}
-              >
-                <Progress
-                  percent={reliability}
-                  steps={10}
-                  size="small"
-                  showInfo={false}
-                  strokeColor="#52c41a"
-                />
-              </Tooltip>
-            </Col>
-            <Col flex={2}>
-              <Tooltip
-                title={`Popularity ${popularity} / 5`}
-                color={theme.palette.primary.main}
-              >
-                <Space align="end">
-                  <Rate disabled allowHalf defaultValue={popularity} />
-                </Space>
-              </Tooltip>
-            </Col>
-          </Row>
-          <Typography.Paragraph>
-            {tags &&
-              tags.map((tag) => (
-                <Tag.CheckableTag
-                  style={{ border: 'solid 1px', borderRadius: '3px' }}
-                  key={tag}
-                  checked={tag === selectedTag}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleTagClick(tag);
-                  }}
-                >
-                  {tag}
-                </Tag.CheckableTag>
-              ))}
-          </Typography.Paragraph>
-          <Typography.Paragraph ellipsis>
-            <h4>{name}</h4>
-          </Typography.Paragraph>
-          <Typography.Paragraph ellipsis>{description}</Typography.Paragraph>
-          {streamAvailable && (
-            <audio
-              ref={audioElementRef}
-              preload="none"
-              onError={(e) => handleAudioError(e.error?.message)}
+    <div className="clickable" onClick={handleClick}>
+      <Card
+        bordered
+        css={{ width: '100%', height: 355, minWidth: 250, marginTop: 16 }}
+      >
+        <Typography.Paragraph>
+          <Image alt={name} src={imgUrl} />
+        </Typography.Paragraph>
+        <Row>
+          <Col flex={10}>
+            <Tooltip
+              title={`${reliability}% reliable`}
+              color={theme.palette.primary.main}
             >
-              <source src={streamUrl} />
-              <track kind="captions" />
-              This channel is currently unavailable.
-            </audio>
-          )}
-        </Card>
-      </div>
-    )
+              <Progress
+                percent={reliability}
+                steps={10}
+                size="small"
+                showInfo={false}
+                strokeColor={theme.strokeColor}
+              />
+            </Tooltip>
+          </Col>
+          <Col flex={1}>
+            <Tooltip
+              title={`Popularity ${popularity} / 5`}
+              color={theme.palette.primary.main}
+            >
+              <Space align="end">
+                <Rate disabled allowHalf defaultValue={popularity} />
+              </Space>
+            </Tooltip>
+          </Col>
+        </Row>
+        <Typography.Paragraph>
+          {tags &&
+            tags.map((tag) => (
+              <Pill
+                key={tag}
+                text={tag}
+                checked={tag === selectedTag}
+                handleClick={handleTagClick}
+              />
+            ))}
+        </Typography.Paragraph>
+        <Typography.Paragraph ellipsis>
+          <h4>{name}</h4>
+        </Typography.Paragraph>
+        <Typography.Paragraph ellipsis>{description}</Typography.Paragraph>
+        {streamAvailable && (
+          <Audio
+            ref={audioElementRef}
+            src={streamUrl}
+            onError={(e) => handleAudioError(e.error?.message)}
+          />
+        )}
+      </Card>
+    </div>
   );
 };
 

@@ -14,6 +14,8 @@ const palette = {
   },
 };
 
+const strokeColor = '#52c41a';
+
 const baseSize = 16;
 
 const typography = {
@@ -29,6 +31,7 @@ const zIndex = {
 
 export default {
   palette,
+  strokeColor,
   typography,
   zIndex,
   size: (size) => `${size * baseSize}px`,

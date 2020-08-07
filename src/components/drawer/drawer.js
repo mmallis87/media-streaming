@@ -5,8 +5,9 @@ import Paper from './paper';
 import DrawerHeader from './drawer-header';
 import DrawerItem from './drawer-item';
 import { toggleDrawer as toggleDrawerAction } from '../../state/app';
+import { HOME_PAGE_TITLE } from '../../util/consts';
 
-const items = [{ url: '/', name: 'Home' }];
+const items = [{ url: '/', name: HOME_PAGE_TITLE }];
 
 const Drawer = ({ isDrawerOpen, toggleDrawer }) => (
   <Paper isDrawerOpen={isDrawerOpen}>

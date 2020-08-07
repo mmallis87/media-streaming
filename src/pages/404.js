@@ -3,6 +3,7 @@ import { Result, Button } from 'antd';
 
 import Layout from '../components/layout/layout';
 import SEO from '../components/seo/seo';
+import { HOME_PAGE_TITLE } from '../util/consts';
 
 const NotFoundPage = () => (
   <Layout>
@@ -13,7 +14,7 @@ const NotFoundPage = () => (
       subTitle="Sorry, the page you visited does not exist."
       extra={
         <Button type="primary" href="/">
-          Back Home
+          {`Back ${HOME_PAGE_TITLE}`}
         </Button>
       }
     />

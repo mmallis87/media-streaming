@@ -668,6 +668,10 @@ pre tt:after {
   margin-right: 16px !important;
 }
 
+.ant-card-body > .ant-typography {
+  margin-bottom: 0.5em !important;
+}
+
 .clickable {
   cursor: pointer;
 }
@@ -687,7 +691,7 @@ pre tt:after {
   width: 96px;
   position: absolute;
   left: 46.7%;
-  top: 29%;
+  top: 32%;
 }
 
 .ant-rate-star {
