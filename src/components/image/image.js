@@ -29,7 +29,11 @@ const Image = ({ src, alt, ...props }) => {
   return fluid ? (
     <Img fluid={fluid} Tag="div" alt={alt} {...props} />
   ) : (
-    <img src={src} alt={alt} {...props} />
+    <img
+      src={src.replace('http:', '').replace('https:', '')}
+      alt={alt}
+      {...props}
+    />
   );
 };
 

@@ -6,7 +6,7 @@ module.exports = {
     description:
       'A serverless AMP-to-PWA media streaming browser single-page application.',
     author: 'Majid Mallis',
-    siteUrl: 'https://radioplayer.surge.sh/',
+    siteUrl: 'https://radioplayer.vercel.app/',
   },
   plugins: [
     {

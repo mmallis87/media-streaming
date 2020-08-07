@@ -1,5 +1,5 @@
 # media-streaming
-Live demo 🚀: https://radioplayer.surge.sh/
+Live demo 🚀: https://radioplayer.vercel.app/
 
 A serverless AMP-to-PWA media-channels browser SPA built with `React`, `Ant` and `Gatsby`.
 
