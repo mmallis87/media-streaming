@@ -10,7 +10,7 @@ import HamburgerMenu from '../hamburger/hamburger-menu';
 import { toggleDrawer as toggleDrawerAction } from '../../state/app';
 
 const Header = ({ isDrawerOpen, toggleDrawer, siteTitle }) => (
-  <div>
+  <>
     <Top>
       <MenuIcon
         isDrawerOpen={isDrawerOpen}
@@ -24,7 +24,7 @@ const Header = ({ isDrawerOpen, toggleDrawer, siteTitle }) => (
         <HeaderTitle>{siteTitle}</HeaderTitle>
       </Link>
     </Navbar>
-  </div>
+  </>
 );
 
 export default connect(

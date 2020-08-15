@@ -51,11 +51,25 @@ module.exports = {
       options: {
         files: ['index.html'],
         dist: 'public/amp',
+        optimize: true,
         serviceWorker: {
-          src: 'https://radioplayer.sh/sw.js',
+          src: 'https://radioplayer.vercel.app/sw.js',
           'data-iframe-src':
-            'https://radioplayer/amp-install-serviceworker.html',
+            'https://radioplayer.vercel.app/amp-install-serviceworker.html',
           layout: 'nodisplay',
+        },
+      },
+    },
+    {
+      resolve: `gatsby-plugin-webfonts`,
+      options: {
+        fonts: {
+          google: [
+            {
+              family: 'IBM Plex Sans',
+              variants: ['400'],
+            },
+          ],
         },
       },
     },

@@ -166,18 +166,17 @@ const IndexPage = () => {
   );
 
   return (
-    <div>
+    <>
       <Layout>
         <SEO title={HOME_PAGE_TITLE} keywords={HOME_PAGE_KEYWORDS} />
 
         <div className="container">
           {/* Sticky error messages center in the top of the page */}
-          <div className={errorMessage ? 'box' : ''}>
-            <MessageCenter
-              message={CANNOT_LOAD_STATIONS_LIST}
-              errorMessage={errorMessage}
-            />
-          </div>
+          <MessageCenter
+            className={errorMessage ? 'box' : ''}
+            message={CANNOT_LOAD_STATIONS_LIST}
+            errorMessage={errorMessage}
+          />
 
           {/* Search box in the top of the page body */}
           <Search query={query} onChange={handleQueryChange} />
@@ -208,7 +207,7 @@ const IndexPage = () => {
           imgUrl={playingStream.imgUrl}
         />
       )}
-    </div>
+    </>
   );
 };
 

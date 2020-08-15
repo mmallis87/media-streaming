@@ -20,6 +20,7 @@ const fetch = (method, url, timeout) => {
     url,
     method,
     crossDomain: true,
+    cache: 'force-cache',
   };
   if (timeout) {
     config.timeout = timeout;
