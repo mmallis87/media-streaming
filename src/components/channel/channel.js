@@ -10,8 +10,8 @@ import {
   Space,
 } from 'antd';
 
+import ReactPlayer from 'react-player';
 import Pill from '../pill/pill';
-import Audio from '../audio/audio';
 import Image from '../image/image';
 import theme from '../../style/theme';
 import { showUnavailableErrorToast } from '../message-center/toasts';
@@ -30,13 +30,12 @@ const Channel = (stream) => {
     stopPlayingStream,
     handleTagClick,
     selectedTag,
+    isPlaying,
   } = stream;
   const [streamAvailable, setStreamAvailable] = useState(false);
-  const audioElementRef = React.createRef();
 
   const handleClick = () => {
-    const audioElement = audioElementRef.current;
-    handleCardClick({ ...stream, audioElement });
+    handleCardClick(stream);
   };
 
   const handleAudioError = () => {
@@ -101,9 +100,9 @@ const Channel = (stream) => {
       </Typography.Paragraph>
       <Typography.Paragraph ellipsis>{description}</Typography.Paragraph>
       {streamAvailable && (
-        <Audio
-          ref={audioElementRef}
-          src={streamUrl}
+        <ReactPlayer
+          playing={isPlaying}
+          url={streamUrl}
           onError={(e) => handleAudioError(e.error?.message)}
         />
       )}

@@ -6,6 +6,7 @@ import Image from '../image/image';
 import theme from '../../style/theme';
 
 const MediaPlayer = ({
+  id,
   imgUrl,
   imgAlt,
   description,
@@ -18,7 +19,10 @@ const MediaPlayer = ({
         <Image width={96} alt={imgAlt} src={imgUrl} />
         <div className="parent play-icon">
           <div className="child">
-            <div className="clickable child" onClick={handlePlayPauseClick}>
+            <div
+              className="clickable child"
+              onClick={() => handlePlayPauseClick(id)}
+            >
               {isPlaying ? (
                 <PauseCircleFilled
                   css={{

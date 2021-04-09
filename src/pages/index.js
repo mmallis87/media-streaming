@@ -53,14 +53,15 @@ const IndexPage = () => {
     }
   };
 
-  const handlePlayPauseClick = () => {
-    if (playingStream.audioElement.paused) {
-      playingStream.audioElement.play();
-      setPlayingStream({ ...playingStream, isPlaying: true });
-    } else {
-      playingStream.audioElement.pause();
-      setPlayingStream({ ...playingStream, isPlaying: false });
-    }
+  const handlePlayPauseClick = (id) => {
+    setPlayingStream({ ...playingStream, isPlaying: !playingStream.isPlaying });
+    setFilteredStreams({
+      ...filteredStreams,
+      [id]: {
+        ...filteredStreams[id],
+        isPlaying: !filteredStreams[id].isPlaying,
+      },
+    });
   };
 
   const stopPlayingStream = (id) => {
@@ -70,33 +71,17 @@ const IndexPage = () => {
   };
 
   const handleCardClick = async (stream) => {
-    let hideBufferingMessage;
-    const { audioElement, name } = stream;
-    if (audioElement) {
-      if (audioElement.paused) {
-        hideBufferingMessage = showLoadingToast(BUFFERING);
+    const { name } = stream;
+    setPlayingStream({ ...stream, isPlaying: !stream.isPlaying });
+    setPageTitle(name);
 
-        audioElement.load();
-
-        const playPromise = audioElement.play();
-        if (playPromise) {
-          playPromise
-            .then((_) => {
-              if (playingStream && !playingStream.audioElement.paused) {
-                playingStream.audioElement.pause();
-              }
-              hideBufferingMessage();
-              setPlayingStream({ ...stream, isPlaying: true });
-              setPageTitle(name);
-            })
-            .catch((_) => {
-              showUnavailableErrorToast();
-            });
-        }
-      }
-    } else {
-      showUnavailableErrorToast();
-    }
+    setFilteredStreams({
+      ...filteredStreams,
+      [stream.id]: {
+        ...filteredStreams[stream.id],
+        isPlaying: !filteredStreams[stream.id].isPlaying,
+      },
+    });
   };
 
   const fetchData = async () => {
@@ -147,18 +132,6 @@ const IndexPage = () => {
     setFilteredStreams(newFilteredStreams);
   }, [query]);
 
-  useEffect(() => {
-    if (playingStream) {
-      // Wait for re-rendering filtered streams to be processed
-      const i = setImmediate(() => {
-        if (playingStream.audioElement.paused) {
-          playingStream.audioElement.play();
-        }
-        clearImmediate(i);
-      });
-    }
-  }, [filteredStreams]);
-
   const dataSource = sortByProp1ThenProp2(
     filteredStreams,
     'popularity',
@@ -200,6 +173,7 @@ const IndexPage = () => {
       {/* Sticky media player */}
       {playingStream && (
         <MediaPlayer
+          id={playingStream.id}
           isPlaying={playingStream.isPlaying}
           description={playingStream.description}
           handlePlayPauseClick={handlePlayPauseClick}

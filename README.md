@@ -62,17 +62,17 @@ A quick look at the top-level files and directories you'll see in this project.
  
 1. **`/src`**: This directory contains all of the source code related to the application. Subfolders are:
 
-   1.1 `/components`: All the React components. In the future we will make it mandatory to have css and unit tests along with each component. 
+   2.1 `/components`: All the React components. In the future we will make it mandatory to have css and unit tests along with each component. 
    
-   1.2 `/pages`: All the pages of the application (So far the index page and the 404 page).
+   2.2 `/pages`: All the pages of the application (So far the index page and the 404 page).
    
-   1.3 `services`: All the services that are consumed by the application. So far only Ajax calls.
+   2.3 `services`: All the services that are consumed by the application. So far only Ajax calls.
    
-   1.4 `state`: It contains all the state management code (state, reducers, actions, dispatch, Redux store...). So far only used for the main menu drawer.
+   2.4 `state`: It contains all the state management code (state, reducers, actions, dispatch, Redux store...). So far only used for the main menu drawer.
    
-   1.5 `style`: Contains style variables values as well as `less` file to override `ant` library variables values 
+   2.5 `style`: Contains style variables values as well as `less` file to override `ant` library variables values 
    
-   1.6 `util`: All the miscellaneous modules used by any of the modules in the folders above.
+   2.6 `util`: All the miscellaneous modules used by any of the modules in the folders above.
 
 1. **`/static`** Contains static files that are copied to the root folder when `/public` folder is created.
 
