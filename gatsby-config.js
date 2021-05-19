@@ -6,7 +6,7 @@ module.exports = {
     description:
       'A serverless AMP-to-PWA media streaming browser single-page application.',
     author: 'Majid Mallis',
-    siteUrl: 'https://radioplayer.vercel.app/',
+    siteUrl: 'https://media-streaming.vercel.app/',
   },
   plugins: [
     {
@@ -53,9 +53,9 @@ module.exports = {
         dist: 'public/amp',
         optimize: true,
         serviceWorker: {
-          src: 'https://radioplayer.vercel.app/sw.js',
+          src: 'https://media-streaming.vercel.app/sw.js',
           'data-iframe-src':
-            'https://radioplayer.vercel.app/amp-install-serviceworker.html',
+            'https://media-streaming.vercel.app/amp-install-serviceworker.html',
           layout: 'nodisplay',
         },
       },

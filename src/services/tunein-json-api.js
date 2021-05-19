@@ -2,7 +2,7 @@ import { TUNEIN_STATIONS_URL } from '../util/consts';
 import http from './http';
 
 const getStreams = () => {
-  return http.get(TUNEIN_STATIONS_URL).then(({ data }) => data);
+  return http.get(TUNEIN_STATIONS_URL).then(({ data }) => data.data);
 };
 
 const getStreamInfo = (streamUrl, t) => {

@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
-  Typography,
+  Card,
+  Col,
   Progress,
   Rate,
-  Tooltip,
   Row,
-  Col,
-  Card,
   Space,
+  Tooltip,
+  Typography,
 } from 'antd';
 
 import ReactPlayer from 'react-player';
@@ -31,8 +31,8 @@ const Channel = (stream) => {
     handleTagClick,
     selectedTag,
     isPlaying,
+    isVideo,
   } = stream;
-  const [streamAvailable, setStreamAvailable] = useState(false);
 
   const handleClick = () => {
     handleCardClick(stream);
@@ -40,13 +40,8 @@ const Channel = (stream) => {
 
   const handleAudioError = () => {
     showUnavailableErrorToast();
-    setStreamAvailable(false);
     stopPlayingStream(id);
   };
-
-  useEffect(() => {
-    setStreamAvailable(true);
-  }, []);
 
   return (
     <Card
@@ -56,32 +51,36 @@ const Channel = (stream) => {
       css={{ width: '100%', height: 355, minWidth: 250, marginTop: 16 }}
     >
       <Typography.Paragraph>
-        <Image alt={name} src={imgUrl} />
+        <Image alt={name} src={imgUrl} width="145" height="145" />
       </Typography.Paragraph>
       <Row>
         <Col flex={10}>
-          <Tooltip
-            title={`${reliability}% reliable`}
-            color={theme.palette.primary.main}
-          >
-            <Progress
-              percent={reliability}
-              steps={10}
-              size="small"
-              showInfo={false}
-              strokeColor={theme.strokeColor}
-            />
-          </Tooltip>
+          {reliability && (
+            <Tooltip
+              title={`${reliability}% reliable`}
+              color={theme.palette.primary.main}
+            >
+              <Progress
+                percent={reliability}
+                steps={10}
+                size="small"
+                showInfo={false}
+                strokeColor={theme.strokeColor}
+              />
+            </Tooltip>
+          )}
         </Col>
         <Col flex={1}>
-          <Tooltip
-            title={`Popularity ${popularity} / 5`}
-            color={theme.palette.primary.main}
-          >
-            <Space align="end">
-              <Rate disabled allowHalf defaultValue={popularity} />
-            </Space>
-          </Tooltip>
+          {popularity && (
+            <Tooltip
+              title={`Popularity ${popularity} / 5`}
+              color={theme.palette.primary.main}
+            >
+              <Space align="end">
+                <Rate disabled allowHalf defaultValue={popularity} />
+              </Space>
+            </Tooltip>
+          )}
         </Col>
       </Row>
       <Typography.Paragraph>
@@ -99,7 +98,7 @@ const Channel = (stream) => {
         <h4>{name}</h4>
       </Typography.Paragraph>
       <Typography.Paragraph ellipsis>{description}</Typography.Paragraph>
-      {streamAvailable && (
+      {isPlaying && !isVideo && (
         <ReactPlayer
           playing={isPlaying}
           url={streamUrl}

@@ -3,7 +3,7 @@
 <head>
   <title>installing service worker</title>
   <script type="text/javascript">
-    const swsource = 'https://radioplayer/sw.js';
+    const swsource = 'https://media-streaming.vercel.app/sw.js';
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register(swsource).then(function(reg) {
         console.log('ServiceWorker scope: ', reg.scope);
