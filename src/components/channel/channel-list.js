@@ -25,7 +25,7 @@ const ChannelList = ({
       }}
       dataSource={dataSource}
       renderItem={(item) =>
-        item.id in items &&
+        //item.id in items &&
         item.id in filteredItems && (
           <List.Item span={16}>
             <Channel

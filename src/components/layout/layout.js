@@ -35,7 +35,6 @@ const Layout = ({ children, isDrawerOpen, toggleDrawer }) => {
         onClick={() => toggleDrawer(false)}
       />
       <Drawer />
-      <Header siteTitle={data.site.siteMetadata.title} />
     </ThemeProvider>
   );
 };

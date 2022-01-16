@@ -11,6 +11,8 @@ const TOAST_ID = 'loading-audio';
 const TUNEIN_STATIONS_URL =
   'https://s3-us-west-1.amazonaws.com/cdn-web.tunein.com/stations.json';
 
+const IPTV_ORG_STATIONS_URL = 'https://iptv-org.github.io/iptv/channels.json';
+
 export {
   BUFFERING,
   CANNOT_LOAD_STATIONS_LIST,
@@ -19,4 +21,5 @@ export {
   SEARCH_PLACEHOLDER,
   TOAST_ID,
   TUNEIN_STATIONS_URL,
+  IPTV_ORG_STATIONS_URL,
 };

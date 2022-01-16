@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactPlayer from 'react-player';
 import { Affix, Card, Typography } from 'antd';
 import { PauseCircleFilled, PlayCircleFilled } from '@ant-design/icons';
 
@@ -7,29 +8,46 @@ import theme from '../../style/theme';
 
 const MediaPlayer = ({
   id,
+  streamUrl,
   imgUrl,
   imgAlt,
   description,
   isPlaying,
+  isVideo,
   handlePlayPauseClick,
 }) => (
-  <Affix offsetBottom={0} css={{ width: '100%' }}>
-    <Card className="padding-md margin-around-md">
+  <Affix offsetBottom={0} css={{ width: '100%', height: '200px' }}>
+    <Card className="padding-md margin-around-md fullHeight">
       <Typography.Paragraph>
         <Image width={96} alt={imgAlt} src={imgUrl} />
-        <div className="parent play-icon">
-          <div className="child">
+        <div className={isVideo ? '' : 'parent play-icon'}>
+          <div className={isVideo ? 'child' : ''}>
             <div
-              className="clickable child"
+              className={isVideo ? '' : 'clickable child'}
               onClick={() => handlePlayPauseClick(id)}
             >
               {isPlaying ? (
-                <PauseCircleFilled
-                  css={{
-                    fontSize: '64px',
-                    color: theme.palette.secondary.main,
-                  }}
-                />
+                isVideo ? (
+                  <div className="player-wrapper">
+                    <ReactPlayer
+                      playing={isPlaying}
+                      url={streamUrl}
+                      controls
+                      height="180px"
+                      width="320px"
+                    />
+                  </div>
+                ) : (
+                  <div className="player-wrapper">
+                    <ReactPlayer
+                      playing={isPlaying}
+                      url={streamUrl}
+                      controls
+                      height="100px"
+                      width="200px"
+                    />
+                  </div>
+                )
               ) : (
                 <PlayCircleFilled
                   css={{

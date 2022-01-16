@@ -1,5 +1,5 @@
 # media-streaming
-Live demo 🚀: https://radioplayer.vercel.app/
+Live demo 🚀: https://media-streaming.vercel.app/
 
 A serverless AMP-to-PWA media-channels browser SPA built with `React`, `Ant` and `Gatsby`.
 

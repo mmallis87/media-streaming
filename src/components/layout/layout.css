@@ -678,6 +678,10 @@ pre tt:after {
   position: relative;
 }
 
+.fullHeight {
+  height: 100%;
+}
+
 .child {
   position: absolute;
   top: 50%;
@@ -690,6 +694,17 @@ pre tt:after {
   position: absolute;
   left: 46.7%;
   top: 32%;
+}
+
+.player-wrapper {
+  position: relative;
+  padding-top: 2% /* Player ratio: 100 / (1280 / 720) */
+}
+
+.react-player {
+  position: absolute;
+  bottom: 100px;
+  left: 0;
 }
 
 .ant-rate-star {
