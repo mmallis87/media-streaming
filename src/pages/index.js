@@ -112,13 +112,17 @@ const IndexPage = () => {
               id,
               isVideo,
               category: stream.category || 'Other',
-              streamUrl: stream.streamUrl || stream.url,
-              imgUrl:
+              streamUrl: (stream.streamUrl || stream.url || '').replace(
+                'http://',
+                'https://',
+              ),
+              imgUrl: (
                 stream.imgUrl ||
                 stream.logo ||
                 `https://via.placeholder.com/145.png&text=${encodeURIComponent(
                   id,
-                )}`,
+                )}`
+              ).replace('http://', 'https://'),
               tags: stream.tags
                 ? stream.tags.forEach((tag) => {
                     if (!newStreamIdsByTag[tag]) {

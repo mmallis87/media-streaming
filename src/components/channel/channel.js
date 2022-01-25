@@ -87,7 +87,7 @@ const Channel = (stream) => {
         {tags &&
           tags.map((tag) => (
             <Pill
-              key={tag}
+              key={tag + new Date().getTime()}
               text={tag}
               checked={tag === selectedTag}
               handleClick={handleTagClick}
