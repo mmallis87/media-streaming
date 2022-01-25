@@ -90,6 +90,25 @@ const IndexPage = () => {
 
   const [streamsByPage, setStreamsByPage] = useState([]);
 
+  useEffect(() => {
+    const { open } = global.XMLHttpRequest.prototype;
+    global.XMLHttpRequest.prototype.open = function (...rest) {
+      if (
+        rest[1].startsWith('http://') &&
+        !rest[1].startsWith(global.location.origin) &&
+        rest[1].endsWith('m3u8')
+      ) {
+        open.apply(this, [
+          rest[0],
+          'https://cors-proxy-container-app.herokuapp.com/' + rest[1],
+          rest[2],
+        ]);
+      } else {
+        open.apply(this, rest);
+      }
+    };
+  }, []);
+
   const fetchData = async () => {
     setErrorMessage('');
     const newStreams = streamsByPage[page - 1] || {};
@@ -97,54 +116,57 @@ const IndexPage = () => {
     setFilteredStreams(newStreams);
   };
 
-  useEffect(() => {
+  const fetchStreams = async () => {
     setFetchingData(true);
 
     const newStreamIdsByTag = {};
     const isVideo = global.location?.search !== '?radio';
     try {
-      (isVideo ? getTvStreams() : getStreams()).then((data) => {
-        const newStreams = data.reduce((obj, stream) => {
-          const id = stream.id || stream.name;
-          if (!filterAdult || stream?.categories[0]?.name !== ADULT_CATEGORY) {
-            obj[id] = {
-              ...stream,
-              id,
-              isVideo,
-              category: stream.category || 'Other',
-              streamUrl: (stream.streamUrl || stream.url || '').replace(
-                'http://',
-                'https://',
-              ),
-              imgUrl: (
-                stream.imgUrl ||
-                stream.logo ||
-                `https://via.placeholder.com/145.png&text=${encodeURIComponent(
-                  id,
-                )}`
-              ).replace('http://', 'https://'),
-              tags: stream.tags
-                ? stream.tags.forEach((tag) => {
-                    if (!newStreamIdsByTag[tag]) {
-                      newStreamIdsByTag[tag] = [];
-                    }
-                    newStreamIdsByTag[tag].push(id);
-                  })
-                : [stream.category],
-            };
-          }
+      const data = await (isVideo ? getTvStreams() : getStreams());
+      const newStreams = data.reduce((obj, stream) => {
+        const id = stream.id || stream.name;
+        if (!filterAdult || stream?.categories[0]?.name !== ADULT_CATEGORY) {
+          obj[id] = {
+            ...stream,
+            id,
+            isVideo,
+            category: stream.category || 'Other',
+            streamUrl: (stream.streamUrl || stream.url || '').replace(
+              'http://',
+              'https://',
+            ),
+            imgUrl: (
+              stream.imgUrl ||
+              stream.logo ||
+              `https://via.placeholder.com/145.png&text=${encodeURIComponent(
+                id,
+              )}`
+            ).replace('http://', 'https://'),
+            tags: stream.tags
+              ? stream.tags.forEach((tag) => {
+                  if (!newStreamIdsByTag[tag]) {
+                    newStreamIdsByTag[tag] = [];
+                  }
+                  newStreamIdsByTag[tag].push(id);
+                })
+              : [stream.category],
+          };
+        }
 
-          return obj;
-        }, {});
-        setAllStreams(newStreams);
-        setStreamIdsByTag(newStreamIdsByTag);
-        setPerPage(DEFAULT_PER_PAGE);
-        setFetchingData(false);
-      });
+        return obj;
+      }, {});
+      setAllStreams(newStreams);
+      setStreamIdsByTag(newStreamIdsByTag);
+      setPerPage(DEFAULT_PER_PAGE);
+      setFetchingData(false);
     } catch (error) {
       setStreams([]);
       setErrorMessage(error.message);
     }
+  };
+
+  useEffect(() => {
+    fetchStreams();
   }, []);
 
   useEffect(() => {
