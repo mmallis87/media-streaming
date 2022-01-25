@@ -106,7 +106,7 @@ const IndexPage = () => {
       (isVideo ? getTvStreams() : getStreams()).then((data) => {
         const newStreams = data.reduce((obj, stream) => {
           const id = stream.id || stream.name;
-          if (!filterAdult || stream.category !== ADULT_CATEGORY) {
+          if (!filterAdult || stream?.categories[0]?.name !== ADULT_CATEGORY) {
             obj[id] = {
               ...stream,
               id,
