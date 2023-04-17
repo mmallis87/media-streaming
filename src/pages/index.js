@@ -73,6 +73,7 @@ const IndexPage = () => {
   };
 
   const handleCardClick = async (stream) => {
+    console.log(stream);
     const { name } = stream;
     setPlayingStream({ ...stream, isPlaying: !stream.isPlaying });
     setPageTitle(name);
@@ -100,7 +101,7 @@ const IndexPage = () => {
       ) {
         open.apply(this, [
           rest[0],
-          'https://cors-proxy-container-app.herokuapp.com/' + rest[1],
+          `https://cors-proxy-container-app.herokuapp.com/${rest[1]}`,
           rest[2],
         ]);
       } else {
@@ -125,7 +126,7 @@ const IndexPage = () => {
       const data = await (isVideo ? getTvStreams() : getStreams());
       const newStreams = data.reduce((obj, stream) => {
         const id = stream.id || stream.name;
-        if (!filterAdult || stream?.categories[0]?.name !== ADULT_CATEGORY) {
+        if (!filterAdult || !stream?.is_nsfw) {
           obj[id] = {
             ...stream,
             id,
@@ -274,11 +275,18 @@ const IndexPage = () => {
           id={playingStream.id}
           isPlaying={playingStream.isPlaying}
           isVideo={playingStream.isVideo}
-          description={playingStream.description}
+          description={`${playingStream.name} ${
+            playingStream.description || ''
+          }`}
           handlePlayPauseClick={handlePlayPauseClick}
           imgAlt={playingStream.name}
           imgUrl={playingStream.imgUrl}
           streamUrl={playingStream.streamUrl}
+          country={playingStream.country}
+          category={playingStream.category}
+          website={playingStream.website}
+          width={playingStream.width}
+          height={playingStream.height}
         />
       )}
     </>

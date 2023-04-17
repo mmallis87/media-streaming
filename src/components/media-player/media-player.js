@@ -12,14 +12,19 @@ const MediaPlayer = ({
   imgUrl,
   imgAlt,
   description,
+  category,
+  country,
+  website,
   isPlaying,
   isVideo,
+  width,
+  height,
   handlePlayPauseClick,
 }) => (
   <Affix offsetBottom={0} css={{ width: '100%', height: '200px' }}>
     <Card className="padding-md margin-around-md fullHeight">
       <Typography.Paragraph>
-        <Image width={96} alt={imgAlt} src={imgUrl} />
+        <Image width={72} alt={imgAlt} src={imgUrl} />
         <div className={isVideo ? '' : 'parent play-icon'}>
           <div className={isVideo ? 'child' : ''}>
             <div
@@ -33,8 +38,8 @@ const MediaPlayer = ({
                       playing={isPlaying}
                       url={streamUrl}
                       controls
-                      height="180px"
-                      width="320px"
+                      height={`${Math.min(height, 180)}px`}
+                      width={`${Math.min(width, 320)}px`}
                     />
                   </div>
                 ) : (
@@ -61,7 +66,13 @@ const MediaPlayer = ({
         </div>
       </Typography.Paragraph>
       <Typography.Paragraph className="no-margin">
-        {description}
+        <strong>{description}</strong>
+        <br />
+        {country} - {category}
+        <br />
+        <a href={website} target="_blank" rel="noreferrer">
+          {website}
+        </a>
       </Typography.Paragraph>
     </Card>
   </Affix>

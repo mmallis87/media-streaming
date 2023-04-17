@@ -42,14 +42,14 @@
   ],
   "scripts": {
     "amp": "find public/amp -type f | xargs amphtml-validator",
-    "build": "gatsby build",
+    "build": "NODE_ENV=production && gatsby build",
     "clean": "gatsby clean",
     "develop": "gatsby develop",
     "format": "eslint . --fix",
     "lint": "eslint .",
     "deploy": "yarn --version && rimraf node_modules && yarn install --frozen-lockfile --check-files && yarn build",
     "start": "yarn develop",
-    "serve": "gatsby serve",
+    "serve": "NODE_ENV=production && gatsby serve",
     "test": "jest --verbose"
   },
   "devDependencies": {
